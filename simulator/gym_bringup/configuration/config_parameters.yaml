@@ -1,0 +1,77 @@
+map:
+  run_name: 'map_wide'
+  # characteristic number for map
+  perf_num: 6
+
+  # map paths
+  map_path: 'configuration/map'
+  map_ext: '.png'
+
+  #Agents
+  num_agents: 1
+
+  # computation budget (can think of it as gen_num times pop_size)
+  popsize: 100
+  budget: 1000
+
+  # optimization method
+  optim_method: 'CMA'
+
+  # seed
+  seed: 12345
+
+agents:
+  num_agents: 1
+
+  #DEFENDER
+  is_defender: 'true'
+  defender_planner: 'pure_pursuit'
+
+  # raceline path and indices
+  defender_wpt_path: 'configuration/waypoints.csv'
+  defender_wpt_delim: ';'
+  defender_wpt_rowskip: 3
+  defender_wpt_xind: 1
+  defender_wpt_yind: 2
+  # wpt_thind: 3
+  # wpt_vind: 5
+
+  # starting pose for map
+  defender_sx: 0.7
+  defender_sy: 0.0
+  defender_stheta: 1.37079632679
+
+  # varied params bound
+  # physical params
+  mass_min: 3.0
+  mass_max: 4.0
+  lf_min: 0.147
+  lf_max: 0.170
+
+  #Pure pursuit planner parameters (take from waypoints example)
+  defender_lookahead_distance: 1.2
+  defender_vgain: 1.0
+  defender_tlad_min: 0.2
+  defender_tlad_max: 5.
+  defender_vgain_min: 0.5
+  defender_vgain_max: 1.5
+  defender_wheelbase: 0.3302
+
+
+  #ATTACKER
+  is_attacker: 'false'
+  planner_attacker: 'rrt'
+
+  #RRT planner parameters
+  #NOTES: can create an environment path variable to this file and add everything relative to that. YAML might not support that
+lidar:
+  number_of_beams: 1080
+  #(pi,-pi)
+  #in radians
+  field_of_view: 4.7 
+  angle_min: -2.35 # =-fov/2
+  angle_max: 2.35 # =fov/2
+  angle_increment: 0.00435588507 # =fov/(number of beams - 1)
+  
+  range_min: 0.0
+  range_max: 30.0

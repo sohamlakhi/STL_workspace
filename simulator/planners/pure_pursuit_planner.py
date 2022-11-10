@@ -4,14 +4,12 @@ from monitor_utils.transform_utils import Transformer as t
 class PurePursuitPlanner:
     
     #initialise and read all required inputs (don't loop the planner object)
-    def __init__ (self, conf, waypoints):
-        self.conf = conf
+    def __init__ (self, waypoints, la, vgain):
+        #self.conf = conf
         self.waypoints = waypoints
-
-        #car and controller parameters
-        self.wb = conf.wheelbase 
-        self.la = conf.lookahead_distance
-        self.vgain = conf.vgain
+        # self.wb = conf.wheelbase 
+        self.la = la
+        self.vgain = vgain
 
 
     def find_closest_waypoint(self):
@@ -19,7 +17,8 @@ class PurePursuitPlanner:
         return np.array#can use lambda here
         pass
     
-    def p_controller(self)
+    def p_controller(self):
+        pass
 
     #receive all required information and return action commands
     def plan(self, heading, position):
@@ -27,8 +26,8 @@ class PurePursuitPlanner:
         #call find closest waypoint (return it in the car's ref frame)
 
         #call p_controller (project or do whatever with the point)
-
-        return throttle, steering
+        pass
+        #return throttle, steering
 
 """
     steps:

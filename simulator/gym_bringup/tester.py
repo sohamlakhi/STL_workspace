@@ -8,6 +8,9 @@ import time
 
 #look into updating rendering (camera following car/cars or full zoom out (and rendering))
 
+#def derive_og (scans, conf):
+    
+
 def main():
     #load configuration yaml
     with open('configuration/config_parameters.yaml') as file:
@@ -37,17 +40,16 @@ def main():
     env.render()
 
     # simulation loop
-    lap_time = 0.0
+    laptime = 0.0
 
     # loops when env not done
     while not done:
-        # get action based on the observation
-        #actions = planner.plan(obs)
-
-        # stepping through the environment
-        obs, step_reward, done, info = env.step(actions)
-
-        lap_time += step_reward
+        obs, step_reward, done, info = env.step(np.array([[0.0, 0.0]]))
+        # derive_og (obs['scans'])
+        print(obs['scans'])
+        time.sleep(1000)
+        laptime += step_reward
+        env.render(mode='human')
 
 if __name__ == '__main__':
     main()
