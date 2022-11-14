@@ -24,7 +24,7 @@ agents:
   num_agents: 1
 
   #DEFENDER
-  is_defender: 'true'
+  is_defender: true
   defender_planner: 'pure_pursuit'
 
   # raceline path and indices
@@ -59,7 +59,7 @@ agents:
 
 
   #ATTACKER
-  is_attacker: 'false'
+  is_attacker: false
   planner_attacker: 'rrt'
 
   #RRT planner parameters
@@ -75,3 +75,9 @@ lidar:
   
   range_min: 0.0
   range_max: 30.0
+
+time:
+  plot_sleep: true
+  plot_pause: true
+  debug_sleep: true
+  debug_pause: true
