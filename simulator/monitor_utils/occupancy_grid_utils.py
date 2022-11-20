@@ -2,7 +2,7 @@ import numpy as np
 
 #must send geometry pose object when instantiating an occupancy grid
 class OccupancyGrid:
-    def __init__(self, conf=None, agent=None):
+    def __init__(self, obs=None, conf=None, agent=None):
         #read these from the config files
         self.grid_resolution = 10
         self.grid_width = 2*3*self.grid_resolution#conf.agents[str(agent)+'_width'] #2 times look-up * resolution 

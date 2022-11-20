@@ -40,13 +40,11 @@ def main():
 
     # simulation loop
     laptime = 0.0
-    rrtplanner = RRTPlanner()
-    # loops when env not done
-    x = 0.0
+    rrtplanner = RRTPlanner(conf=conf, obs = obs, agent = 'defender') #passing obs and conf for initialisation. Defender default for now
+
     while not done:
-        obs, step_reward, done, info = env.step(np.array([[x, x]]))
+        obs, step_reward, done, info = env.step(np.array([[0.0, 0.0]]))
         rrtplanner.populate_ocgrid(obs)
-        #debug_pause()
         laptime += step_reward
         env.render(mode='human')
         x = 5.0
