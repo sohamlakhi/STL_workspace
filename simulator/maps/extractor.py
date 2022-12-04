@@ -3,6 +3,15 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from sympy.solvers import solve
 from sympy import Symbol
+import time
+import os
+import monitor_utils.bagging_utils as bagger
+
+"""
+Modularise this by turning it into a function!
+"""
+
+PATH = os.path.abspath(os.getcwd())
 
 """
 errors:
@@ -15,7 +24,7 @@ def interp(pt1, pt2):
 
 def get_normal(v):
     a,b = v
-
+    
     x = Symbol('x')
     y = Symbol('y')
 
@@ -25,16 +34,20 @@ def get_normal(v):
     we're solving a system of non-linear equations here - a circle of radius 1 and a line passing through the origin
     For all parameters, this will ALWAYS yield 2 answers -> which correspond to the normals with both configurations (pointing 'in' and 'out')
     """
-    return np.asarray(ans[0])
+
+    assert len(ans) == 2
+    return np.asarray(ans[0]) if (-a/b > 0) else np.asarray(ans[1])
 
 def main():
     pdcenterline = pd.read_csv('IMS_centerline.csv')
     npcl = pdcenterline.to_numpy()
 
     colsize = npcl.shape[0]
-    cl = np.zeros((colsize,2)) #2d arrays of x,y co-ords
+    cl = np.zeros((colsize,2)) #2d arrays of x,y co-ords -> [x y] per row
     inl = np.zeros((colsize,2))
     ol = np.zeros((colsize,2))
+    inq = np.zeros((colsize,2))
+    oq = np.zeros((colsize,2))
 
     #using track widths at the ith point (could interpolate to the midpoint -> but it is constant in this case)
     for i in range(0, colsize-1): #looping over all columns
@@ -43,30 +56,40 @@ def main():
             n = get_normal(np.subtract(npcl[i+1], npcl[i])[0:2])
 
             w_i = npcl[i,2]
-            inl[i] = cl[i]+w_i*n
+            inl[i] = cl[i]-w_i*n
+            inq[i] = cl[i]-0.5*w_i*n
 
             w_o = npcl[i,3]
-            ol[i] = cl[i]-w_o*n
+            ol[i] = cl[i]+w_o*n
+            oq[i] = cl[i]+0.5*w_o*n
         
-        else:
-            cl[i] = interp(npcl[i], npcl[0])
-            get_normal(np.subtract(npcl[0], npcl[i])[0:2])
-            w_i = npcl[i,2]
-            inl[i] = cl[i]+w_i*n
+        # else:
+        #     cl[i] = interp(npcl[i], npcl[0])
+        #     n = get_normal(np.subtract(npcl[0], npcl[i])[0:2])
+        #     w_i = npcl[i,2]
+        #     inl[i] = cl[i]-w_i*n
+        #     inq[i] = cl[i]-0.5*w_i*n
 
-            w_o = npcl[i,3]
-            ol[i] = cl[i]-w_o*n
+        #     w_o = npcl[i,3]
+        #     ol[i] = cl[i]+w_o*n
+        #     oq[i] = cl[i]+0.5*w_o*n
     
     #plot centerline
-    plt.plot(npcl[:,0],npcl[:,1], 'bo', markersize=1)
+    # plt.plot(npcl[:,0],npcl[:,1], 'bo', markersize=1)
     plt.plot(cl[:,0], cl[:,1],'ro', markersize =1)
-    plt.plot(inl[:,0], inl[:,1], 'ro', markersize=1)
+    plt.plot(inl[:,0], inl[:,1], 'bo', markersize=1)
+    plt.plot(inq[:,0], inq[:,1], 'go', markersize=1)
     plt.plot(ol[:,0], ol[:,1], 'ro', markersize=1)
+    plt.plot(oq[:,0], oq[:,1], 'mo', markersize=1)
     plt.axis('equal')
-    print(ol)
     plt.show()
 
     #save the stuff - write pandas/numpy implementation 
+    bagger.nptocsv(inl, column=['x', 'y'], name='innerline', path=PATH, index_csv = False)
+    bagger.nptocsv(ol, column=['x', 'y'], name='outerline', path=PATH, index_csv= False)
+    bagger.nptocsv(oq, column=['x', 'y'], name='outerhalf', path=PATH, index_csv= False)
+    bagger.nptocsv(inq, column=['x', 'y'], name='innerhalf', path=PATH, index_csv = False)
+    bagger.nptocsv(cl, column=['x', 'y'], name='centerline', path=PATH, index_csv = False)
 
 
 if __name__ == "__main__":
@@ -92,4 +115,8 @@ find roots of a given equation (which can be thought of as a point solving two e
 
 Can modularise this!
 
+"""
+
+"""
+TODO: fix normal orientation problem!!
 """

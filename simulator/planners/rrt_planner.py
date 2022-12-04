@@ -79,3 +79,9 @@ class RRTPlanner:
 
 
 
+"""
+go through tree/graph theory and dsa
+look at atsuhi's code
+look at ahmad's code 
+ask leroy for help
+"""

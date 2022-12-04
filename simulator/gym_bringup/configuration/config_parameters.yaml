@@ -4,7 +4,7 @@ map:
   perf_num: 6
 
   # map paths
-  map_path: 'configuration/map'
+  map_path: '../maps/IMS_map'
   map_ext: '.png'
 
   #Agents
@@ -28,7 +28,7 @@ agents:
   defender_planner: 'pure_pursuit'
 
   # raceline path and indices
-  defender_wpt_path: 'configuration/waypoints.csv'
+  defender_wpt_path: '../maps/centerline.csv'
   defender_wpt_delim: ';'
   defender_wpt_rowskip: 3
   defender_wpt_xind: 1
@@ -39,7 +39,7 @@ agents:
   # starting pose for map
   defender_sx: 0.7
   defender_sy: 0.0
-  defender_stheta: 1.37079632679
+  defender_stheta: 4.5204
 
   # varied params bound
   # physical params
@@ -49,8 +49,8 @@ agents:
   lf_max: 0.170
 
   #Pure pursuit planner parameters (take from waypoints example)
-  defender_lookahead_distance: 1.2
-  defender_vgain: 1.0
+  defender_lookahead_distance: 1 #0.82461887897713965
+  defender_vgain: 4 #1.375
   defender_tlad_min: 0.2
   defender_tlad_max: 5.
   defender_vgain_min: 0.5
@@ -79,5 +79,9 @@ lidar:
 time:
   plot_sleep: true
   plot_pause: true
-  debug_sleep: true
-  debug_pause: true
+  debug_sleep: false
+  debug_pause: false
+
+# #NOTES:
+# f110_env contains the env settings (derived class from Open AI gym)
+# steering limits: 24 to -24 degrees or +/-0.4189 radians
