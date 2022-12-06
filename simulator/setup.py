@@ -5,6 +5,6 @@ setup(name='simulator',
       author='Soham Lakhi',
       author_email='sohamlakhi39@gmail.com',
       packages=find_packages(),
-      install_requires=['f110-gym==0.2.1']
+      install_requires=['f110-gym==0.2.1', 'matplotlib', 'pandas']
       )
       
