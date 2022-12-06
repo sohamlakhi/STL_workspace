@@ -6,6 +6,8 @@ from sympy import Symbol
 import time
 import os
 import monitor_utils.bagging_utils as bagger
+from scipy.spatial.transform import Rotation as R
+
 
 """
 Modularise this by turning it into a function!
@@ -13,33 +15,29 @@ Modularise this by turning it into a function!
 
 PATH = os.path.abspath(os.getcwd())
 
-"""
-errors:
-one point pops out in plot (plot and see which one)
-"""
 def interp(pt1, pt2):
     x = (pt1[0]+pt2[0])/2
     y = (pt1[1]+pt2[1])/2
     return np.array([[x ,y]])
 
-def get_normal(v):
-    a,b = v
+# def get_normal(v):
+#     a,b = v
     
-    x = Symbol('x')
-    y = Symbol('y')
+#     x = Symbol('x')
+#     y = Symbol('y')
 
-    ans = solve((x**2+y**2-1, a*x+b*y), (x,y))
-    #write a static assert here to always return 2 answers (or write the different test cases as in circle-line method from purepursuit)
-    """
-    we're solving a system of non-linear equations here - a circle of radius 1 and a line passing through the origin
-    For all parameters, this will ALWAYS yield 2 answers -> which correspond to the normals with both configurations (pointing 'in' and 'out')
-    """
+#     ans = solve((x**2+y**2-1, a*x+b*y), (x,y))
+#     #write a static assert here to always return 2 answers (or write the different test cases as in circle-line method from purepursuit)
+#     """
+#     we're solving a system of non-linear equations here - a circle of radius 1 and a line passing through the origin
+#     For all parameters, this will ALWAYS yield 2 answers -> which correspond to the normals with both configurations (pointing 'in' and 'out')
+#     """
 
-    assert len(ans) == 2
-    return np.asarray(ans[0]) if (-a/b > 0) else np.asarray(ans[1])
+#     assert len(ans) == 2
+#     return np.asarray(ans[0]) if (-a/b > 0) else np.asarray(ans[1])
 
 def main():
-    pdcenterline = pd.read_csv('IMS_centerline.csv')
+    pdcenterline = pd.read_csv('~/STL_workspace/simulator/maps/IMS_centerline.csv')
     npcl = pdcenterline.to_numpy()
 
     colsize = npcl.shape[0]
@@ -49,31 +47,31 @@ def main():
     inq = np.zeros((colsize,2))
     oq = np.zeros((colsize,2))
 
+    rot_m = R.from_euler('z', np.pi/2)
     #using track widths at the ith point (could interpolate to the midpoint -> but it is constant in this case)
     for i in range(0, colsize-1): #looping over all columns
         if i < colsize-1:
-            cl[i] = interp(npcl[i], npcl[i+1]) #if i != colsize-1 else interp(npcl[i], npcl[0]) #condition to close the track
-            n = get_normal(np.subtract(npcl[i+1], npcl[i])[0:2])
-
-            w_i = npcl[i,2]
-            inl[i] = cl[i]-w_i*n
-            inq[i] = cl[i]-0.5*w_i*n
-
-            w_o = npcl[i,3]
-            ol[i] = cl[i]+w_o*n
-            oq[i] = cl[i]+0.5*w_o*n
+            cl[i] = interp(npcl[i], npcl[i+1]) 
+            t = np.subtract(npcl[i+1], npcl[i])[0:2]
+        else:
+            cl[i] = interp(npcl[i], npcl[0])
+            t = np.subtract(npcl[i], npcl[0])[0:2]
         
-        # else:
-        #     cl[i] = interp(npcl[i], npcl[0])
-        #     n = get_normal(np.subtract(npcl[0], npcl[i])[0:2])
-        #     w_i = npcl[i,2]
-        #     inl[i] = cl[i]-w_i*n
-        #     inq[i] = cl[i]-0.5*w_i*n
+        t = np.append(t/np.linalg.norm(t), 0)
+        print(t)
+        
+        n = rot_m.apply(t)[0:2]
+        print(n)
 
-        #     w_o = npcl[i,3]
-        #     ol[i] = cl[i]+w_o*n
-        #     oq[i] = cl[i]+0.5*w_o*n
-    
+        w_i = npcl[i,2]
+        inl[i] = cl[i]-w_i*n
+        inq[i] = cl[i]-0.5*w_i*n
+
+        w_o = npcl[i,3]
+        ol[i] = cl[i]+w_o*n
+        oq[i] = cl[i]+0.5*w_o*n
+        
+        
     #plot centerline
     # plt.plot(npcl[:,0],npcl[:,1], 'bo', markersize=1)
     plt.plot(cl[:,0], cl[:,1],'ro', markersize =1)
@@ -115,8 +113,4 @@ find roots of a given equation (which can be thought of as a point solving two e
 
 Can modularise this!
 
-"""
-
-"""
-TODO: fix normal orientation problem!!
 """

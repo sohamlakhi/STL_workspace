@@ -81,6 +81,7 @@ time:
   plot_pause: true
   debug_sleep: false
   debug_pause: false
+  debug_print: true
 
 # #NOTES:
 # f110_env contains the env settings (derived class from Open AI gym)

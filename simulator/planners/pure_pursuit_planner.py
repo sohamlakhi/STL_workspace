@@ -4,6 +4,7 @@ from pyglet.gl import GL_POINTS
 import monitor_utils.running_utils as debugger
 import matplotlib.pyplot as plt
 from monitor_utils.plotting_utils import PurePursuitPlotter
+from scipy.spatial import KDTree
 
 """
 speed things up with numba -> njit
@@ -15,12 +16,14 @@ class PurePursuitPlanner:
     def __init__ (self, waypoints, la, vgain, wb):
         #self.conf = conf
         self.waypoints = waypoints
+        self.waypointstree = KDTree(waypoints, compact_nodes=True, balanced_tree=True)
         # self.wb = conf.wheelbase 
         self.la = la
         self.vgain = vgain
         self.wb = wb
         global plotter
         plotter = PurePursuitPlotter()
+        plotter.plot_data(self.waypoints[:,0], self.waypoints[:,1], 'mo', markersize=1)
 
         self.drawn_waypoints =[]
 
@@ -42,7 +45,7 @@ class PurePursuitPlanner:
         except AssertionError as msg:
             print(msg)
 
-        plotter.plot_data(self.waypoints[:,0], self.waypoints[:,1], 'mo', markersize=1)
+        # plotter.plot_data(self.waypoints[:,0], self.waypoints[:,1], 'mo', markersize=1)
         plotter.plot_data(self.position[0,0], self.position[0,1], 'bo', markersize=5)
         plotter.plot_data(self.waypoints[closest_waypoint_index, 0], self.waypoints[closest_waypoint_index, 1], 'ro', markersize=5)
 
@@ -53,7 +56,7 @@ class PurePursuitPlanner:
     """
     def find_goalpoint(self, wpt_dist, cl_wpt_i):
         if wpt_dist>self.la:
-            print("la_point before"+ str(self.waypoints[cl_wpt_i]))
+            # print("la_point before"+ str(self.waypoints[cl_wpt_i]))
             return self.waypoints[cl_wpt_i]
         
         else:
@@ -64,14 +67,14 @@ class PurePursuitPlanner:
             while (iter_dist<self.la):
                 j = j+1
                 #wrap around indices -> to move around track
-                if (cl_wpt_i+j == 804):
+                if (cl_wpt_i+j >= 804):
                     cl_wpt_i = 0
                     j = 0
                 iter_dist = np.linalg.norm(self.waypoints[cl_wpt_i+j]-self.position)
             
             # take projection of required point on to lookahead circle -> need to manage reference frames properly
             la_point = self.waypoints[cl_wpt_i+j] - self.position
-            print("la_point"+ str(la_point))
+            # print("la_point"+ str(la_point))
             la_point_projected = self.la*(la_point/np.linalg.norm(la_point)) + self.position #adding position to adjust for co-ordinate frame
 
             plotter.plot_data(la_point_projected[0,0], la_point_projected[0,1], 'go', markersize=5)
@@ -83,17 +86,17 @@ class PurePursuitPlanner:
     #Use this function in rrt planner by providing goalpoint
     def get_actuation(self, goalpoint):
         y = goalpoint[0,1]
-        print('y = '+str(y))
+        # print('y = '+str(y))
         if np.abs(y) < 1e-6:
-            print('abs selected')
+            # print('abs selected')
             return self.vgain, 0.
         # radius = 1/(2.0*y/self.la**2)
         # steering_angle = np.arctan(self.wb/radius) #this might not work
         curvature = (2.0*y)/(self.la**2.0)
-        print('curvature: ' + str(curvature))
+        # print('curvature: ' + str(curvature))
         # steering_angle = np.clip(curvature, -0.4189, 0.4189)
         steering_angle = np.minimum(0.4189, np.maximum(curvature, -0.4189))
-        print('steering_angle_clipped= '+str(steering_angle))
+        # print('steering_angle_clipped= '+str(steering_angle))
         debugger.debug_delay(0.05)
         return self.vgain, steering_angle
 
@@ -112,19 +115,22 @@ class PurePursuitPlanner:
     def plan(self, heading, position):
         self.heading = heading
         self.position = position
+        plotter.plot_data(self.position[0,0], self.position[0,1], 'bo', markersize=5)
 
-        min_dist, closest_waypoint_index = self.find_closest_waypoint()
+        # min_dist, closest_waypoint_index = self.find_closest_waypoint()
+        min_dist, closest_waypoint_index = self.waypointstree.query(self.position)
+        plotter.plot_data(self.waypointstree.data[closest_waypoint_index, 0], self.waypoints[closest_waypoint_index, 1], 'ro', markersize=5)
         goalpoint = self.find_goalpoint(min_dist, closest_waypoint_index)
         rot_m, trans_v = t.from_global_to_car(self.heading, self.position)
-        print(rot_m)
-        # print(rot_m.shape)
-        # print(type(rot_m))
-        # debugger.debug_pause()
-        print(trans_v)
-        # debugger.debug_pause()
-        print(goalpoint.T)
+        # print(rot_m)
+        # # print(rot_m.shape)
+        # # print(type(rot_m))
+        # # debugger.debug_pause()
+        # print(trans_v)
+        # # debugger.debug_pause()
+        # print(goalpoint.T)
         transformed_goalpoint = (np.dot(rot_m, (goalpoint+trans_v).T)).T #using dot for matrix vector multiplication
-        print(transformed_goalpoint)
+        # print(transformed_goalpoint)
         debugger.debug_pause()
         throttle, steering = self.get_actuation(transformed_goalpoint)
 

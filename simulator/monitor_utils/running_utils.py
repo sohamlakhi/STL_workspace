@@ -39,3 +39,10 @@ def debug_pause():
         return
     else:
         return
+
+def debug_print(item):
+    if conf.time['debug_print']:
+        input('Please press enter to continue to the next step')
+        return
+    else:
+        return

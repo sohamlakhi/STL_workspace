@@ -1,7 +1,7 @@
 """
 to make frenet frame_tests
 """
-from scipy.interpolate import CubicSpline
+from scipy.interpolate import CubicSpline, interp1d
 import matplotlib.pyplot as plt
 import monitor_utils.bagging_utils as bagger 
 import numpy as np
@@ -40,7 +40,7 @@ see atsushi's implementation
 # print(t)
 # print(t_col)
 #note: different axes for different oeperations
-cl = bagger.csvtonp('~/STL_workspace/simulator/maps/poly_centerline_points - poly_centerline_points.csv')
+cl = bagger.csvtonp('~/STL_workspace/simulator/maps/centerline.csv')
 # print(cl.shape)
 differ = np.diff(cl, 1, axis = 0)
 # print(differ.shape)
@@ -55,12 +55,12 @@ t = np.cumsum(differ_norm_insert_0)
 # t = t[:, np.newaxis]
 # print(t.shape)
 cl_new = np.append(cl, np.array([cl[0,:]]), axis=0)
-print(cl_new.shape)
+# print(cl_new.shape)
 
 # print(t.shape)
 # print(cl[:,0].shape)
-print('sdf')
-print(cl_new[:,0].shape)
+# print('sdf')
+# print(cl_new[:,0].shape)
 cs_x = CubicSpline(t, cl_new[:,0], bc_type = 'periodic')
 cs_y = CubicSpline(t, cl_new[:,1], bc_type = 'periodic')
 
@@ -69,7 +69,7 @@ cs_total = CubicSpline(t, cl_new, bc_type='periodic')
 t_plot = np.linspace(0, t[-1] ,t.shape[0])
 
 # print(cs_x.c.shape)
-print(cs_total.c.shape)
+# print(cs_total.c.shape)
 # print(cs_total.c)
 
 # print(cs_x.c[0,0])
@@ -152,17 +152,75 @@ def integration(cs_total, t_total):
         id = id[0]
         assert isinstance(id, int), "index has to be int!"
         if (id == t_total.size-1): break
-        print(id)
+        # print(id)
         # remember -> you don't need to wrap index around as you already did so when setting up the cubic spline
         interval = np.linspace(t_total[id], t_total[id+1], 100)
         # integral[id+1] = simpson(integrand(interval, id, cs_derivative), interval)
         integral[id+1] = trapezoid(integrand(interval, id, cs_derivative, t_total), interval)
-        print(integral[id+1])
+        # print(integral[id+1])
 
     return integral
 interdone = integration(cs_total, t)
-print(interdone)
+# print(interdone)
 
+#this gives you the s frame around the track
+s = np.cumsum(interdone)
+
+#define an interp between s and t
+interpf = interp1d(s,t)
+
+#instead of going through so many points, you can use polyline method (see: https://arxiv.org/abs/2012.14617 )
+#linspace 29300 points between 0 and s[-1]. interp with t. calculate corresponding x and y points
+s_new = np.linspace(0, s[-1], int(s[-1]/0.001))
+# print(s_new[800]-s_new[801])
+t_new = interpf(s_new)
+
+newxy = cs_total(t_new)
+# print(s_new)
+# print(newxy.shape)
+# plt.plot(newxy[:,0], newxy[:,1], 'o', markersize=1)
+
+# either use kd tree or sliding window based on previous location (they have ground truth)
+import time
+def find_closest_waypoint(position, waypoints):
+    start = time.time()
+    try:
+        closest_waypoint_index = 0 #initialise with nonsense index
+        min_dist = np.linalg.norm(position-waypoints[0])
+        for i in range(0, waypoints.shape[0]-1):
+            dist = np.linalg.norm(position-
+            waypoints[i])
+            if dist<min_dist:
+                min_dist=dist
+                closest_waypoint_index = i
+        
+        assert closest_waypoint_index != -1, "Invalid closest_waypoint_index. Shouldn't be -1"
+    except AssertionError as msg:
+        print(msg)
+
+    end = time.time()
+    return min_dist, closest_waypoint_index, start-end
+
+
+# min_dist, closest_index, timetaken = find_closest_waypoint(np.array([[0.0, 0.7]]), newxy)
+
+from scipy.spatial import KDTree
+
+tree = KDTree(newxy, compact_nodes=True, balanced_tree=True)
+
+start = time.time()
+d, closest_index = tree.query(np.array([[0.0, 0.7]]))
+end = time.time()
+print(end-start)
+# print(timetaken)
+plt.plot(newxy[:,0], newxy[:,1], 'bo', markersize=1)
+plt.plot(newxy[closest_index, 0], newxy[closest_index, 1], 'ro', markersize = 2)
+plt.plot(0.0, 0.7, 'go', markersize = 5)
+
+# build a corresponding hash map (with bidict) 
+
+
+#TODO: figure out mod logic for gap operator
 
 
 # theta = 2 * np.pi * np.linspace(0, 1, 5)
@@ -172,24 +230,24 @@ print(interdone)
 
 
 # plt.plot(cs_x(t_plot), cs_y(t_plot), 'r', label = 'separate')
-# plt.plot(cs_total(t_plot)[:,0], cs_total(t_plot)[:,1], 'b', label='together')
+# plt.plot(cs_total(t)[:,0], cs_total(t)[:,1], 'bo', label='together')
 # plt.plot(theta, interdone, 'bo', label = "piecewise integral")
 # plt.plot(theta, cs_test(theta)[:,0], 'ro', label = "x vs t")
 # plt.plot(theta, cs_test(theta)[:,1], 'mo', label = 'y vs t')
 # plt.xlabel('theta')
-# plt.axis('equal')
+plt.axis('equal')
 # plt.legend()
 # # plt.pause(1)
 # plt.show()
 
-x_plotting = np.arange(0,t.size, 1)
-print(np.cumsum(interdone)[-1])
-print(t[-1])
-plt.plot(x_plotting, t, '-r')
-plt.plot(x_plotting, np.cumsum(interdone), '-b')
-print('break')
-print(t.shape)
-print(np.cumsum(interdone).shape)
+# x_plotting = np.arange(0,t.size, 1)
+# print(np.cumsum(interdone)[-1])
+# print(t[-1])
+# plt.plot(x_plotting, t, '-r')
+# plt.plot(x_plotting, np.cumsum(interdone), '-b')
+# print('break')
+# print(t.shape)
+# print(np.cumsum(interdone).shape)
 # plt.plot(t, interdone, 'bo', label = "piecewise integral")
 plt.show()
 

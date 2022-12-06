@@ -53,7 +53,9 @@ add disable plotting from the params config file
 """
     
 
-
+"""
+TODO: blitting: https://matplotlib.org/stable/tutorials/advanced/blitting.html
+"""
 
 # use something like this to do your animations or use matplotlib animations: https://matplotlib.org/stable/gallery/animation/animation_demo.html#sphx-glr-gallery-animation-animation-demo-py
 # blit this to speed it up instead of clearing and plotting again and again  https://matplotlib.org/stable/gallery/event_handling/pong_sgskip.html#sphx-glr-gallery-event-handling-pong-sgskip-py
