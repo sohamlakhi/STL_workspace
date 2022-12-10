@@ -21,7 +21,6 @@ map:
   seed: 12345
 
 agents:
-  num_agents: 1
 
   #DEFENDER
   is_defender: true
@@ -50,7 +49,7 @@ agents:
 
   #Pure pursuit planner parameters (take from waypoints example)
   defender_lookahead_distance: 1 #0.82461887897713965
-  defender_vgain: 4 #1.375
+  defender_vgain: 2 #1.375
   defender_tlad_min: 0.2
   defender_tlad_max: 5.
   defender_vgain_min: 0.5
@@ -60,7 +59,17 @@ agents:
 
   #ATTACKER
   is_attacker: false
-  planner_attacker: 'rrt'
+  planner_attacker: 'pure_pursuit'
+
+  attacker_wpt_path: '../maps/outerhalf.csv'
+
+  attacker_sx: -0.3
+  attacker_sy: 15
+  attacker_stheta: 4.5204
+
+  attacker_lookahead_distance: 1
+  attacker_vgain: 4
+
 
   #RRT planner parameters
   #NOTES: can create an environment path variable to this file and add everything relative to that. YAML might not support that

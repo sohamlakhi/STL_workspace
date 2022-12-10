@@ -1,0 +1,97 @@
+https://spinningup.openai.com/en/latest/index.html
+look at his courses: https://www.cs.ubc.ca/~van/
+UCL RL course (leading guy): https://www.davidsilver.uk/teaching/
+https://www.deepmind.com/learning-resources/reinforcement-learning-lecture-series-2021
+https://www.deepmind.com/learning-resources/introduction-to-reinforcement-learning-with-david-silver
+https://www.cs.ubc.ca/~van/cpsc533/rl.html
+https://d2l.ai/
+look at google resources (and all enph resources in slides)
+REACH OUT TO PROFS AT UBC!!! and everywhere else!
+
+
+Bezier curves: https://pomax.github.io/bezierinfo/
+https://matplotlib.org/stable/api/bezier_api.html#matplotlib.bezier.BezierSegment
+
+Discrete math courses (fill in the gaps between plp and these. Learn implementation from DSA - geeksforgeeks): 
+https://www.cs.sfu.ca/~ggbaker/zju/math/
+https://courses.engr.illinois.edu/cs173/fa2022/ALL-lectures/
+https://discrete.openmathbooks.org/dmoi2/frontmatter.html
+https://cse.buffalo.edu/~rapaport/191/F10/syl.html
+https://ggc-discrete-math.github.io/index.html#_introducing_discrete_mathematics
+PLP
+
+Motion Planning: https://ompl.kavrakilab.org/index.html
+
+scientific computing: 
+- pwalls resources
+- UCB: https://pythonnumericalmethods.berkeley.edu/notebooks/Index.html
+- https://scipy-lectures.org/
+
+image processing: https://matplotlib.org/stable/tutorials/introductory/images.html
+- look at ahmad's script
+- opencv tutorial: https://www.geeksforgeeks.org/matplotlib-pyplot-imshow-in-python/
+- look at engphys 353 for opencv
+
+Very basic intro to system design (pipes, sockets, signals, etc.): http://www.cs.toronto.edu/~iq/csc209s/
+CPEN 221 concept examples: https://github.com/orgs/CPEN-221/repositories
+Embedded systems (CPEN 432 - UBC): https://cpen432.github.io/
+Ultimate embedded systems notes: https://users.ece.cmu.edu/~koopman/lectures/index.html
+
+Ulimate python textbook with exercises: https://ehmatthes.github.io/pcc/
+
+Python tips: https://book.pythontips.com/en/latest/index.html
+
+ULTIMATE machine learning resources: https://sebastianraschka.com/teaching/ -> go through his stuff
+
+Numerical computing and python and MORE: http://hplgit.github.io/
+Numerical computing: https://www.youtube.com/playlist?list=PLbxFfU5GKZz29nXsWchAN1c3WsgiMiSXd
+Programming for computation: https://hplgit.github.io/prog4comp/index.html
+http://hplgit.github.io/prog4comp/doc/pub/p4c-sphinx-Python/index.html
+look at your matlab code to solve a system of non-linear equations using the jacobian
+
+EE263: Stanford Engineering Everywhere: https://ee263.stanford.edu/archive/
+Higher math courses/textbook (elliptic curves and quadtratic forms/ modular forms): https://www.mast.queensu.ca/~kani/
+
+Resources on Jordan Canonical Form: 
+https://sites.math.northwestern.edu/~scanez/courses/334/notes/jordan-form.pdf
+https://ms.mcmaster.ca/wolkowic/Courses/M741/jordanc.pdf
+https://brilliant.org/wiki/jordan-canonical-form/
+https://see.stanford.edu/materials/lsoeldsee263/12-jcf.pdf
+https://ee263.stanford.edu/archive/
+
+Intro to Linear Algebra: http://linear.ups.edu/html/fcla.html
+Intro+Advanced Linear Algebra: https://www.math.tamu.edu/~yvorobet/MATH304-504/ -> contains slides on row space and column space and their relationship
+
+Basic intro to Software engineering/CS - UW ECE650 Methods and Tools for Software Engineering: https://ece.uwaterloo.ca/~agurfink/ece650/
+
+Signals and Systems with an application to linear physical systems (short applied version of signals and systems from mit ocw with Dennis Freedman): https://lpsa.swarthmore.edu/
+
+Decision-Processes and formal methods: https://www.decision-procedures.org/slides/
+read this along with prop logic and SAT solving slides from ece650 (get assignments from rishi) so you have a holistic understanding of formal methods
+
+Control systems and electronics lectures: https://www.youtube.com/@katkimshow/playlists
+
+Robotics toolbox: https://petercorke.com/toolboxes/robotics-toolbox/
+
+Ultimate linear algebra, calc and math course slides (a little dry reference): https://math.okstate.edu/people/binegar/courses.html
+
+computer science programming, algorithms reference: https://iq.opengenus.org/ -> important reference to graphs
+
+Ultimate autonomous driving course: https://www.youtube.com/playlist?list=PLRk3Kku2FrqJiIV1thvn_L5CEQrrbpvgv (use the linked slides -> videos are in german)
+Autonomous driving lectures:https://www.youtube.com/playlist?list=PLL57Sz4fhxLpCXgN0lvCF7aHAlRA5FoFr 
+Autoware auto and self-driving cars lecture series: https://www.youtube.com/playlist?list=PLL57Sz4fhxLpCXgN0lvCF7aHAlRA5FoFr
+
+Overview of Controls: https://www.youtube.com/playlist?list=PLMrJAkhIeNNR20Mz-VpzgfQs5zrYi085m
+
+Great math channel: https://www.youtube.com/@MathTheBeautiful/playlists
+
+Ultimate motion planning course: https://www.cs.cmu.edu/~motionplanning/
+
+Computer graphics: 
+Ray tracing: https://raytracing.github.io/books/RayTracingInOneWeekend.html
+https://in1weekend.blogspot.com/
+https://haosulab.github.io/intro-cv/FA21/index.html
+https://geoml.github.io/Lectures/L3_Curves_I.pdf
+https://www.cs.cornell.edu/courses/cs4620/2013fa/lectures/16spline-curves.pdf
+https://www.cs.cmu.edu/afs/cs/academic/class/15462-s10/www/lec-slides/lec06.pdf
+

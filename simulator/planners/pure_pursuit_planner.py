@@ -5,6 +5,8 @@ import monitor_utils.running_utils as debugger
 import matplotlib.pyplot as plt
 from monitor_utils.plotting_utils import PurePursuitPlotter
 from scipy.spatial import KDTree
+from monitor_utils.transform_utils import FrenetFrame
+import monitor_utils.bagging_utils as bagger
 
 """
 speed things up with numba -> njit
@@ -24,6 +26,8 @@ class PurePursuitPlanner:
         global plotter
         plotter = PurePursuitPlotter()
         plotter.plot_data(self.waypoints[:,0], self.waypoints[:,1], 'mo', markersize=1)
+
+        self.frenet = FrenetFrame(bagger.csvtonp('~/STL_workspace/simulator/maps/centerline.csv'), data='raw')
 
         self.drawn_waypoints =[]
 
@@ -116,7 +120,8 @@ class PurePursuitPlanner:
         self.heading = heading
         self.position = position
         plotter.plot_data(self.position[0,0], self.position[0,1], 'bo', markersize=5)
-
+        frenetposition = self.frenet.from_global_to_frenet(self.position)
+        print(frenetposition)
         # min_dist, closest_waypoint_index = self.find_closest_waypoint()
         min_dist, closest_waypoint_index = self.waypointstree.query(self.position)
         plotter.plot_data(self.waypointstree.data[closest_waypoint_index, 0], self.waypoints[closest_waypoint_index, 1], 'ro', markersize=5)

@@ -1,0 +1,97 @@
+map:
+  run_name: 'map_wide'
+  # characteristic number for map
+  perf_num: 6
+
+  # map paths
+  map_path: '../maps/IMS_map'
+  map_ext: '.png'
+
+  #Agents
+  num_agents: 2
+
+  # computation budget (can think of it as gen_num times pop_size)
+  popsize: 100
+  budget: 1000
+
+  # optimization method
+  optim_method: 'CMA'
+
+  # seed
+  seed: 12345
+
+agents:
+
+  #DEFENDER
+  is_defender: true
+  defender_planner: 'pure_pursuit'
+
+  # raceline path and indices
+  defender_wpt_path: '../maps/innerhalf.csv'
+  defender_wpt_delim: ';'
+  defender_wpt_rowskip: 3
+  defender_wpt_xind: 1
+  defender_wpt_yind: 2
+  # wpt_thind: 3
+  # wpt_vind: 5
+
+  # starting pose for map
+  defender_sx: 0.7
+  defender_sy: 0.0
+  defender_stheta: 4.5204
+
+  # varied params bound
+  # physical params
+  mass_min: 3.0
+  mass_max: 4.0
+  lf_min: 0.147
+  lf_max: 0.170
+
+  #Pure pursuit planner parameters (take from waypoints example)
+  defender_lookahead_distance: 1 #0.82461887897713965
+  defender_vgain: 2 #1.375
+  defender_tlad_min: 0.2
+  defender_tlad_max: 5.
+  defender_vgain_min: 0.5
+  defender_vgain_max: 1.5
+  defender_wheelbase: 0.3302
+
+
+  #ATTACKER
+  is_attacker: true
+  planner_attacker: 'pure_pursuit'
+
+  attacker_wpt_path: '../maps/outerhalf.csv'
+
+  attacker_sx: -0.3
+  attacker_sy: 15
+  attacker_stheta: 4.5204
+
+  attacker_lookahead_distance: 1
+  attacker_vgain: 4
+
+
+  #RRT planner parameters
+  #NOTES: can create an environment path variable to this file and add everything relative to that. YAML might not support that
+lidar:
+  number_of_beams: 1080
+  #(pi,-pi)
+  #in radians
+  field_of_view: 4.7 
+  angle_min: -2.35 # =-fov/2
+  angle_max: 2.35 # =fov/2
+  angle_increment: 0.00435588507 # =fov/(number of beams - 1)
+  
+  range_min: 0.0
+  range_max: 30.0
+
+time:
+  plot_sleep: true
+  plot_pause: true
+  debug_sleep: false
+  debug_pause: false
+  debug_print: true
+
+# #NOTES:
+# f110_env contains the env settings (derived class from Open AI gym)
+# steering limits: 24 to -24 degrees or +/-0.4189 radians

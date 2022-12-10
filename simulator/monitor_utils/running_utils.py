@@ -5,7 +5,7 @@ from argparse import Namespace
 #NOTE: consider using decorators to do this
 
 #run on module import
-with open('configuration/config_parameters.yaml') as file:
+with open('configuration/config_parameters_single.yaml') as file:
     conf_dict = yaml.load(file, Loader=yaml.FullLoader)
 conf = Namespace(**conf_dict) #configuration dictionary
 

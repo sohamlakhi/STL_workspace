@@ -1,0 +1,76 @@
+TODO:
+- add second container on the same network with MATLAB
+OR
+- build new image from base matlab docker image
+
+Saturday:
+- setup notion for your notes
+- look into S-Taliro/BREACH and install required tools in the right place -> do it the right way with virtualenv/docker
+- make new packages for yourself (learn how to use pip and push the required stuff)
+- screw docker and display forwarding for now
+- package your pure pursuit planner in the right way
+- get started on RRT (look at lecture and paper again and use geeksforgeeks and see what to do and other rrt resources -> see notes.txt)
+
+Tomorrow: 
+- look at notes.txt
+
+
+- separate pure pursuit code 
+- write simple executable environment
+- visualise signals using matplotlib
+- finish bezier theory
+- use scipy integrator on gap operator
+- figure out track centre co-ordinates and shit (go through hash functions)
+
+use pyglet for simulator GUI
+scipy
+numpy
+
+figure out payment and work permit
+figure out resume
+figure out coop assignment and checkin
+
+use linalg from numpy to do your lin alg stuff
+go through lin alg and scientific computing (UCB and pwalls -> github books) and do extra theory (open lin alg textbook ubc/waterloo -> see notes)
+
+TODO:
+- figure out psy taliro/breach and matlab interface
+- write planners
+- work on your own utils 
+- finish STL encodings
+- transfer everything to notion and move to overleaf+draw.io for everything
+- download matlab and interface it with python. Run Breach over it
+
+- complete discrete math holes and geeksforgeeks graph stuff (DFS, BFS, djikstras etc.)
+- do some occupancy grid stuff along with some other utils
+
+micro-steps:
+- read paper -> deferred
+- read Ahmad's code -> done
+- meet with Daniel Christadoss -> done
+- read fast voxel paper, github lib, bresenham, DDA -> done
+- finish occupancy grid implementation with visualisation -> done
+
+Tomorrow:
+- cover graph and motion planning gaps
+- implement RRT on static map (full thing) -> use ahmad's code and atsushi and MATLAB
+- read up on clothoids and use f1tenth planner repo as reference
+- play by ear -> organise the rest of it
+
+bezier resources: matplotlib, bezier python library, atsushi, bezier quick intro thing
+
+NOTES:
+All the ray tracing algorithms and their variants step through a line and pick cells that approximate that line. all the optimisations are done to reduce floating point arithmetic
+To fill an occupancy grid, one must construct the obstruction grid from the lidar scans and use any line algorithm to draw and then use flood fill through the rest
+
+Features to build:
+- Breach integration
+- finish STL policies
+- signal utils and operators (lane based - centreline co-ords, bezier curves, gap operator (piecewise integration of bezier curves), etc.)
+- delaunay raceline extractor (ahmad code and opencv extraction)
+
+
+Big todo:
+- figure out pyglet
+- figure out 
+- look into concurrent events and multithreading this simulation
